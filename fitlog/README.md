@@ -6,7 +6,7 @@ It helps users browse workouts, view workout details, save exercises for later, 
 
 ## Live Project
 
-Live Demo: Add your Vercel deployment link here
+Live Demo: https://b14-a6-fit-log-d1k4.vercel.app/
 
 GitHub: https://github.com/iimdadd/B14-A6-FitLog
 
