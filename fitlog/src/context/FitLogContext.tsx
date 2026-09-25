@@ -6,10 +6,12 @@ import type { Workout } from "@/types/workout";
 interface FitLogContextType {
   plan: Workout[];
   saved: Workout[];
+  completed: number[];
   addToPlan: (workout: Workout) => void;
   saveWorkout: (workout: Workout) => void;
   removeFromPlan: (id: number) => void;
   removeFromSaved: (id: number) => void;
+  markAsDone: (id: number) => void;
 }
 
 const FitLogContext = createContext<FitLogContextType | undefined>(
@@ -23,6 +25,7 @@ export function FitLogProvider({
 }) {
   const [plan, setPlan] = useState<Workout[]>([]);
   const [saved, setSaved] = useState<Workout[]>([]);
+  const [completed, setCompleted] = useState<number[]>([]);
 
   function addToPlan(workout: Workout) {
     setPlan((currentPlan) => {
@@ -60,15 +63,27 @@ export function FitLogProvider({
     );
   }
 
+  function markAsDone(id: number) {
+    setCompleted((currentCompleted) => {
+      if (currentCompleted.includes(id)) {
+        return currentCompleted;
+      }
+
+      return [...currentCompleted, id];
+    });
+  }
+
   return (
     <FitLogContext.Provider
       value={{
         plan,
         saved,
+        completed,
         addToPlan,
         saveWorkout,
         removeFromPlan,
         removeFromSaved,
+        markAsDone,
       }}
     >
       {children}

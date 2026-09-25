@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -9,8 +10,10 @@ export default function MyPlan() {
   const {
     plan,
     saved,
+    completed,
     removeFromPlan,
     removeFromSaved,
+    markAsDone,
   } = useFitLog();
 
   const [activeTab, setActiveTab] = useState<"plan" | "saved">("plan");
@@ -37,13 +40,15 @@ export default function MyPlan() {
     toast.success("Workout removed from saved.");
   }
 
-  function handleDone() {
+  function handleDone(id: number) {
+    markAsDone(id);
     toast.success("Workout marked as done!");
   }
 
   return (
     <main className="min-h-screen bg-[#0b0d0f] px-4 py-16 text-white sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
+        {/* Page Header */}
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#ccff00]">
             FITLOG
@@ -58,6 +63,7 @@ export default function MyPlan() {
           </p>
         </div>
 
+        {/* Metrics */}
         <div className="mt-10 grid gap-4 sm:grid-cols-3">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
             <p className="text-sm text-white/50">Exercises</p>
@@ -75,6 +81,7 @@ export default function MyPlan() {
           </div>
         </div>
 
+        {/* Tabs */}
         <div className="mt-10 flex gap-3 border-b border-white/10">
           <button
             onClick={() => setActiveTab("plan")}
@@ -99,6 +106,7 @@ export default function MyPlan() {
           </button>
         </div>
 
+        {/* Empty State */}
         {currentWorkouts.length === 0 ? (
           <div className="mt-12 rounded-2xl border border-dashed border-white/20 p-10 text-center">
             <h2 className="text-2xl font-black uppercase">
@@ -117,6 +125,7 @@ export default function MyPlan() {
             </Link>
           </div>
         ) : (
+          /* Workout Cards */
           <div className="mt-8 grid gap-5 md:grid-cols-2">
             {currentWorkouts.map((workout) => (
               <article
@@ -124,7 +133,7 @@ export default function MyPlan() {
                 className="overflow-hidden rounded-2xl border border-white/10 bg-white/5"
               >
                 <div className="grid sm:grid-cols-[180px_1fr]">
-                  <img
+                  <Image
                     src={workout.image}
                     alt={workout.name}
                     width={180}
@@ -141,12 +150,14 @@ export default function MyPlan() {
                       {workout.equipment}
                     </p>
 
+                    {/* Workout Stats */}
                     <div className="mt-4 flex flex-wrap gap-3 text-sm text-white/60">
                       <span>◷ {workout.duration} min</span>
                       <span>🔥 {workout.caloriesBurned} kcal</span>
                       <span>★ {workout.rating}</span>
                     </div>
 
+                    {/* Actions */}
                     <div className="mt-5 flex flex-wrap gap-2">
                       <Link
                         href={`/workout/${workout.id}`}
@@ -158,10 +169,13 @@ export default function MyPlan() {
                       {activeTab === "plan" ? (
                         <>
                           <button
-                            onClick={handleDone}
-                            className="rounded-full bg-[#ccff00] px-4 py-2 text-xs font-bold uppercase text-black transition hover:bg-white"
+                            onClick={() => handleDone(workout.id)}
+                            disabled={completed.includes(workout.id)}
+                            className="rounded-full bg-[#ccff00] px-4 py-2 text-xs font-bold uppercase text-black transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
                           >
-                            ✓ Mark as Done
+                            {completed.includes(workout.id)
+                              ? "✓ Done"
+                              : "✓ Mark as Done"}
                           </button>
 
                           <button
