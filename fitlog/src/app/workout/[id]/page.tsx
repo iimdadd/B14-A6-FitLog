@@ -1,5 +1,7 @@
+
 import Image from "next/image";
 import { getWorkout } from "@/lib/api";
+import WorkoutActions from "@/components/WorkoutActions";
 
 export default async function WorkoutDetails({
   params,
@@ -12,19 +14,17 @@ export default async function WorkoutDetails({
   return (
     <main className="min-h-screen bg-[#0b0d0f] px-4 py-16 text-white sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2">
-        {/* Image */}
         <div className="overflow-hidden rounded-2xl border border-white/10">
           <Image
-  src={workout.image}
-  alt={workout.name}
-  width={800}
-  height={800}
-  priority
-  className="h-full w-full object-cover"
-/>
+            src={workout.image}
+            alt={workout.name}
+            width={800}
+            height={800}
+            priority
+            className="h-full w-full object-cover"
+          />
         </div>
 
-        {/* Details */}
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#ccff00]">
             {workout.difficulty}
@@ -38,7 +38,6 @@ export default async function WorkoutDetails({
             {workout.description}
           </p>
 
-          {/* Muscle groups */}
           <div className="mt-6 flex flex-wrap gap-2">
             {workout.muscleGroups.map((group) => (
               <span
@@ -50,7 +49,6 @@ export default async function WorkoutDetails({
             ))}
           </div>
 
-          {/* Specs */}
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3">
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
               <p className="text-xs text-white/50">Equipment</p>
@@ -69,7 +67,9 @@ export default async function WorkoutDetails({
 
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
               <p className="text-xs text-white/50">Duration</p>
-              <p className="mt-1 font-semibold">{workout.duration} min</p>
+              <p className="mt-1 font-semibold">
+                {workout.duration} min
+              </p>
             </div>
 
             <div className="rounded-xl border border-white/10 bg-white/5 p-4">
@@ -85,9 +85,10 @@ export default async function WorkoutDetails({
             </div>
           </div>
 
-          {/* Instructions */}
           <div className="mt-10">
-            <h2 className="text-2xl font-bold uppercase">Instructions</h2>
+            <h2 className="text-2xl font-bold uppercase">
+              Instructions
+            </h2>
 
             <ol className="mt-4 list-decimal space-y-3 pl-5 text-white/70">
               {workout.instructions.map((instruction, index) => (
@@ -95,6 +96,8 @@ export default async function WorkoutDetails({
               ))}
             </ol>
           </div>
+
+          <WorkoutActions workout={workout} />
         </div>
       </div>
     </main>
